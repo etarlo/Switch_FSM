@@ -2081,6 +2081,27 @@
       box-shadow: 0 8px 24px rgba(34, 197, 94, 0.3);
     }
 
+    .form-status {
+      margin-top: 0.75rem;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+    .form-status.is-success {
+      background: rgba(34, 197, 94, 0.12);
+      border: 1px solid rgba(34, 197, 94, 0.4);
+      color: #86efac;
+    }
+    .form-status.is-error {
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #fca5a5;
+    }
+    .form-submit[disabled] {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
     .form-note {
       text-align: center;
       font-size: 13px;
@@ -2771,7 +2792,7 @@
           </div>
         </div>
         <div class="quote-form-wrapper">
-          <form class="quote-form" action="#" method="POST">
+          <form id="quoteForm" class="quote-form" action="/api/quote" method="POST">
             <div class="form-group">
               <label for="name">Your Name</label>
               <input type="text" id="name" name="name" placeholder="John Smith" required>
@@ -2822,10 +2843,11 @@
               </select>
             </div>
             <button type="submit" class="form-submit">
-              Get My Free Quote
+              <span class="form-submit-label">Get My Free Quote</span>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
             </button>
             <p class="form-note">No obligations. We'll review your needs and send a custom quote.</p>
+            <p id="quoteFormStatus" class="form-status" role="status" aria-live="polite" hidden></p>
           </form>
         </div>
       </div>
@@ -2917,6 +2939,60 @@
       };
       tick();
       setInterval(tick, 1400);
+    })();
+
+    // Quote form submission — posts to /api/quote and displays inline status
+    (function () {
+      const form = document.getElementById('quoteForm');
+      if (!form) return;
+      const status = document.getElementById('quoteFormStatus');
+      const button = form.querySelector('.form-submit');
+      const label = form.querySelector('.form-submit-label');
+      const defaultLabel = label ? label.textContent : '';
+
+      const setStatus = (message, kind) => {
+        if (!status) return;
+        status.textContent = message;
+        status.classList.remove('is-success', 'is-error');
+        if (kind) status.classList.add(`is-${kind}`);
+        status.hidden = !message;
+      };
+
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        setStatus('', null);
+        if (button) {
+          button.disabled = true;
+          if (label) label.textContent = 'Sending...';
+        }
+
+        try {
+          const payload = Object.fromEntries(new FormData(form));
+          const response = await fetch(form.action, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+            },
+            body: JSON.stringify(payload),
+          });
+          let result = {};
+          try { result = await response.json(); } catch {}
+          if (response.ok && result.ok) {
+            setStatus("Thanks! We'll be in touch within 24 hours.", 'success');
+            form.reset();
+          } else {
+            setStatus(result.error || 'Something went wrong. Please try again or email us directly.', 'error');
+          }
+        } catch {
+          setStatus('Network error. Please try again or email us directly.', 'error');
+        } finally {
+          if (button) {
+            button.disabled = false;
+            if (label) label.textContent = defaultLabel;
+          }
+        }
+      });
     })();
   </script>
 </body>

@@ -2125,25 +2125,96 @@
        MINIMAL FOOTER
     ════════════════════════════════════════════════════════════════════════════ */
     .footer--minimal {
-      padding: var(--space-8) var(--section-padding-x);
+      padding: var(--space-12) var(--section-padding-x) var(--space-6);
     }
 
-    .footer-minimal-inner {
+    .footer-minimal-grid {
       max-width: var(--container-max);
       margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: var(--space-12);
+      align-items: start;
+      padding-bottom: var(--space-8);
     }
 
-    .footer--minimal .footer-logo {
-      margin-bottom: 0;
+    .footer-brand-block .footer-logo {
+      margin-bottom: var(--space-2);
       font-size: 20px;
+    }
+
+    .footer-tagline-sm {
+      font-size: 13px;
+      color: var(--color-gray-500);
+      line-height: 1.5;
+      max-width: 240px;
+    }
+
+    .footer-nav-heading {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-gray-400);
+      margin-bottom: var(--space-4);
+    }
+
+    .footer-nav-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-2) var(--space-6);
+    }
+
+    .footer-nav-list li {
+      margin: 0;
+    }
+
+    .footer-nav-list a {
+      font-size: 14px;
+      color: var(--color-gray-300);
+      transition: color var(--transition-fast);
+      display: inline-block;
+      padding: 2px 0;
+    }
+
+    .footer-nav-list a:hover {
+      color: var(--color-white);
+    }
+
+    .footer-nav-link--all {
+      font-weight: 500;
+      color: var(--color-accent) !important;
+    }
+
+    .footer-nav-link--all:hover {
+      color: var(--color-white) !important;
+    }
+
+    .footer-minimal-bottom {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding-top: var(--space-5);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      text-align: center;
     }
 
     .footer--minimal .footer-copyright {
       font-size: 13px;
       color: var(--color-gray-500);
+    }
+
+    @media (max-width: 700px) {
+      .footer-minimal-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-8);
+        text-align: left;
+      }
+      .footer-nav-list {
+        grid-template-columns: 1fr;
+      }
     }
 
     .footer-link {
@@ -2878,15 +2949,30 @@
   </section>
 
   <!-- ═══════════════════════════════════════════════════════════════════════
-       FOOTER - Minimal
+       FOOTER - Minimal + SEO-friendly comparison nav
   ═══════════════════════════════════════════════════════════════════════ -->
   <footer class="footer footer--minimal">
-    <div class="footer-minimal-inner">
-      <div class="footer-logo">
-        <span class="footer-logo-dot"></span>
-        SwitchFSM
+    <div class="footer-minimal-grid">
+      <div class="footer-brand-block">
+        <div class="footer-logo">
+          <span class="footer-logo-dot"></span>
+          SwitchFSM
+        </div>
+        <p class="footer-tagline-sm">Worry-free FSM platform migration.</p>
       </div>
-      <a href="/compare/" class="footer-link">Comparisons</a>
+      <nav class="footer-nav" aria-label="Compare FSM platforms">
+        <h2 class="footer-nav-heading">Compare FSM Platforms</h2>
+        <ul class="footer-nav-list">
+          <li><a href="/compare/workiz-vs-servicetitan" title="Workiz vs ServiceTitan: side-by-side comparison and migration guide">Workiz vs ServiceTitan</a></li>
+          <li><a href="/compare/workiz-vs-jobber" title="Workiz vs Jobber: side-by-side comparison and migration guide">Workiz vs Jobber</a></li>
+          <li><a href="/compare/workiz-vs-housecallpro" title="Workiz vs Housecall Pro: side-by-side comparison and migration guide">Workiz vs Housecall Pro</a></li>
+          <li><a href="/compare/workiz-vs-fieldedge" title="Workiz vs FieldEdge: side-by-side comparison and migration guide">Workiz vs FieldEdge</a></li>
+          <li><a href="/compare/workiz-vs-fieldpulse" title="Workiz vs FieldPulse: side-by-side comparison and migration guide">Workiz vs FieldPulse</a></li>
+          <li><a href="/compare/" title="Browse every FSM platform comparison" class="footer-nav-link--all">All FSM platform comparisons →</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="footer-minimal-bottom">
       <p class="footer-copyright">© 2026 SwitchFSM. All rights reserved.</p>
     </div>
   </footer>

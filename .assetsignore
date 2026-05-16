@@ -1,4 +1,29 @@
+# Worker code & config — never expose
 _worker.js
 wrangler.jsonc
+
+# Self
 .assetsignore
+
+# Git & dev metadata — exposing these leaks the full repo
+.git
+.git/**
 .gitignore
+.github
+.github/**
+
+# Local IDE / agent state
+.claude
+.claude/**
+.vscode
+.vscode/**
+.idea
+.idea/**
+
+# Editor / OS junk
+.DS_Store
+Thumbs.db
+*.log
+
+# Docs we don't need to serve
+README.md

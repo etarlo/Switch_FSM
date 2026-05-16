@@ -1,5 +1,8 @@
-// Cloudflare Pages Function: receives quote form submissions and emails them via Resend.
-// Requires the RESEND_API_KEY environment variable to be set in the Pages project settings.
+// Cloudflare Worker entry: routes /api/quote POST to the email handler,
+// falls through to static assets for every other request.
+//
+// Requires RESEND_API_KEY to be set as a secret in the Worker's
+// Settings → Variables and Secrets in the Cloudflare dashboard.
 
 const RECIPIENT = 'eric@tarlogroup.com';
 const FROM = 'SwitchFSM Quote Form <onboarding@resend.dev>';
@@ -35,12 +38,16 @@ function escapeHtml(value) {
 function json(body, status = 200) {
   return new Response(JSON.stringify(body), {
     status,
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'Cache-Control': 'no-store',
+    },
   });
 }
 
-export async function onRequestPost({ request, env }) {
+async function handleQuote(request, env) {
   if (!env.RESEND_API_KEY) {
+    console.error('RESEND_API_KEY is not set on this worker.');
     return json({ ok: false, error: 'Email service is not configured.' }, 500);
   }
 
@@ -122,3 +129,22 @@ export async function onRequestPost({ request, env }) {
 
   return json({ ok: true });
 }
+
+export default {
+  async fetch(request, env, ctx) {
+    const url = new URL(request.url);
+
+    if (url.pathname === '/api/quote') {
+      if (request.method !== 'POST') {
+        return new Response('Method Not Allowed', {
+          status: 405,
+          headers: { Allow: 'POST' },
+        });
+      }
+      return handleQuote(request, env);
+    }
+
+    // Everything else: serve from the static-asset binding.
+    return env.ASSETS.fetch(request);
+  },
+};

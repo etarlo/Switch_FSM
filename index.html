@@ -1501,11 +1501,14 @@
       font-size: 13px;
       line-height: 1.6;
       color: var(--color-gray-400);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
     .export-terminal-line {
       display: flex;
       gap: var(--space-2);
+      white-space: nowrap;
     }
 
     .export-terminal-prompt {
@@ -1522,9 +1525,10 @@
 
     .export-content h3 {
       font-family: var(--font-sans);
-      font-size: 32px;
+      font-size: clamp(24px, 4.5vw, 32px);
       font-weight: 700;
       letter-spacing: -0.02em;
+      line-height: 1.2;
       margin-bottom: var(--space-3);
     }
 
@@ -1538,6 +1542,7 @@
     .export-formats {
       display: flex;
       gap: var(--space-3);
+      flex-wrap: wrap;
     }
 
     .export-format {
@@ -1548,6 +1553,7 @@
       font-size: 13px;
       font-weight: 500;
       color: var(--color-gray-700);
+      white-space: nowrap;
     }
 
     /* ════════════════════════════════════════════════════════════════════════════

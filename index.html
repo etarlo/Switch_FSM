@@ -1304,9 +1304,10 @@
 
     .time-content h3 {
       font-family: var(--font-sans);
-      font-size: 32px;
+      font-size: clamp(24px, 4.5vw, 32px);
       font-weight: 700;
       letter-spacing: -0.02em;
+      line-height: 1.2;
       margin-bottom: var(--space-3);
     }
 
@@ -2315,6 +2316,22 @@
         gap: var(--space-4);
         text-align: center;
       }
+
+      /* Platforms table: collapse to 2 columns at tablet width to
+         prevent merchant-name column from squashing under fixed pixel
+         column widths. */
+      .bank-table-header,
+      .bank-table-row {
+        grid-template-columns: 1fr auto;
+        gap: var(--space-3);
+      }
+
+      .bank-table-header > *:nth-child(2),
+      .bank-table-header > *:nth-child(3),
+      .bank-table-row > *:nth-child(2),
+      .bank-table-row > *:nth-child(3) {
+        display: none;
+      }
     }
 
     @media (max-width: 600px) {
@@ -2348,19 +2365,6 @@
       .features-grid {
         grid-template-columns: 1fr;
         gap: var(--space-6);
-      }
-
-      .bank-table-header,
-      .bank-table-row {
-        grid-template-columns: 1fr auto;
-        gap: var(--space-3);
-      }
-
-      .bank-table-header > *:nth-child(2),
-      .bank-table-header > *:nth-child(3),
-      .bank-table-row > *:nth-child(2),
-      .bank-table-row > *:nth-child(3) {
-        display: none;
       }
     }
   </style>
